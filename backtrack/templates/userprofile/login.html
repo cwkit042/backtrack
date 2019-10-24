@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% load staticfiles %}
+{% block title %} Login {% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+			<br>
+				<h5>Register a new account</h5>
+				<h5>Click <a href='{% url "userprofile:register" %}'>Register</a></h5>
+			<br>
+            <form method="post" action=".">
+                {% csrf_token %}
+                <!-- username -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username">
+                </div>
+                <!-- pasword -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <!-- submit -->
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <br>
+			<h5>Forgot Password</h5>
+			<h5>Click<a href='{% url "password_reset_recover" %}'>Here</a>Reset password</h5>
+</div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

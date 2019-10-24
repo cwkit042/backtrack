@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+	Article Details
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+
+        <h1 class="col-12 mt-4 mb-4">{{ article.title }}</h1>
+        <div class="col-12 alert alert-success">Author：{{ article.author }}
+		· <a href="#" onclick="confirm_safe_delete()">Delete</a>
+		<!-- prevent CSRF -->
+		<form
+			style="display:none;"
+			id="safe_delete"
+			action="{% url 'article:article_safe_delete' article.id %}"
+			method="POST"
+		>
+`			{% csrf_token %}
+			<button type="submit">submit</button>
+		</form>
+		· <a href="{% url 'article:article_update' article.id %}">Update</a>
+	</div>
+	<!-- safe -->
+        <!-- https://stackoverflow.com/questions/4056883/when-should-i-use-escape-and-safe-in-djangos-template-system -->
+        <div class="col-12">
+            <p>{{ article.body | safe}}</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirm_safe_delete(){
+        layer.open({
+            title: "Confirm!!!",
+            content: "Delete it, really?!",
+	    btn: ['Enter'],
+            yes: function(index, layero) {
+                $('form#safe_delete button').click();
+		layer.close(index);
+            },
+        })
+    }
+</script>
+
+{% endblock content %}

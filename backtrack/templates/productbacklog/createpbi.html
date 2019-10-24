@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %} New Article {% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <br>
+            <!-- submit form -->
+            <form method="post" action=".">
+
+                {% csrf_token %}
+                <!-- title -->
+                <div class="form-group">
+                    <!-- tag -->
+                    <label for="title">Name</label>
+                    <!-- title box -->
+                    <input type="text" class="form-control" id="name" name="name">
+                </div>
+
+                <div class="form-group">
+                    <!-- tag -->
+                    <label for="title">Description</label>
+                    <!-- title box -->
+                    <input type="text" class="form-control" id="description" name="description">
+                </div>
+
+                <div class="form-group">
+                    <!-- tag -->
+                    <label for="title">Story Point</label>
+                    <!-- title box -->
+                    <input type="text" class="form-control" id="storypoint" name="storypoint">
+                </div>
+
+                <!-- submit btn -->
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

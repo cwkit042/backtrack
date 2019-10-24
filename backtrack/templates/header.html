@@ -1,0 +1,78 @@
+<!-- define navigation bar -->
+
+<style>
+    nav {
+        user-select: none;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+
+    <!-- nav bar logo -->
+    <a class="navbar-brand" href="/productbacklog">Backtrack</a>
+
+    <!-- nav entry -->
+    <div>
+      <ul class="navbar-nav">
+        <!-- item -->
+        <li class="nav-item">
+          <a class="nav-link" href="/productbacklog/addproduct">Add Product</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/productbacklog">PBI List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/productbacklog/addpbi">Add PBI</a>
+        </li>
+
+	{% if user.is_authenticated %}
+          <!-- if login, shows username -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ user.username }}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#" onclick="user_delete()">Delete AC</a>
+                <a class="dropdown-item" href='#'>Profile</a>
+                <a class="dropdown-item" href="#">Logout</a>
+
+              </div>
+          </li>
+        <!-- if not, shows login -->
+        {% else %}
+          <li class="nav-item">
+              <a class="nav-link" href="#">Login</a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </div>
+
+  </div>
+</nav>
+
+{% if user.is_authenticated %}
+<form
+    style="display:none;"
+    id="user_delete"
+    action="#}"
+    method="POST"
+>
+{% csrf_token %}
+    <button type="submit">submit</button>
+</form>
+    <script>
+        function user_delete() {
+            layer.open({
+                title: "Delete AC",
+                content: "Confirm to Delete AC",
+		btn: ['Delete'],
+                yes: function(index, layero) {
+                    $('form#user_delete button').click();
+                    layer.close(index);
+                },
+            })
+        }
+    </script>
+{% endif %}
