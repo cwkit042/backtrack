@@ -1,3 +1,8 @@
 # BackTrack
+*requirements*  
 
-django-bootstrap-datepicker-plus
+- python3.6  
+- django  
+- bootstrap4  
+- django-bootstrap4  
+- django-bootstrap-datepicker-plus  
