@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import F
 from .forms import AddSprintForm, AddSBIForm, AddTaskForm
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -42,10 +43,14 @@ def add_sbi(request, id):
         if add_sbi_form.is_valid():
             new_sbi = add_sbi_form.save(commit=False)
             new_sbi.productbacklogitem = target_pbi
-            new_sbi.save()
             target_pbi.progress = 'P'
+            pbi_list = ProductBacklogItem.objects.filter(order__gt=target_pbi.order, product=target_pbi.product)
+            if pbi_list.exists():
+                pbi_list.update(order=F('order')-1)
+            target_pbi.order = 0
+            new_sbi.save()
             target_pbi.save()
-            return redirect('/productbacklog/pbicurrentlist')
+            return redirect('/productbacklog/orderlist')
         else:
             return HttpResponse("The Form is not valid, please post again")
     else:
