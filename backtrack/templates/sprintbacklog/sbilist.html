@@ -17,11 +17,12 @@
         <th scope="col">Name</th>
         <th scope="col">Description</th>
         <th scope="col">Task</th>
+        <th scope="burndown">Burndown</th>
       </tr>
     </thead>
     <tbody>
       {% for sbi in sbi_list %}
-      <tr>
+      <tr class="sbi">
         <th scope="row">{{sbi.productbacklogitem.name}}</th>
         <td>{{sbi.description}}</td>
 
@@ -43,8 +44,8 @@
               <tr>
                 {% if task.sprintbacklogitem == sbi %}
                   <th scope="row">{{task.name}}</th>
-                  <th scope="row">{{task.effort}}</th>
-                  <th scope="col">{{task.progress}}</th>
+                  <th scope="row" class="effort">{{task.effort}}</th>
+                  <th scope="row" class="pgs">{{task.progress}}</th>
                   <th scope="row">{{task.owner}}</th>
                 {% endif %}
               </tr>
@@ -52,10 +53,38 @@
             </tbody>
           </table>
         </td>
+        <td class="burndown"></td>
 
       </tr>
       {% endfor %}
     </tbody>
 </table>
+<script type='text/javascript'>
+
+  var body = document.getElementsByTagName("body")[0];
+  document.addEventListener("DOMContentLoaded", cal);
+  function cal(){
+    var sbis = document.getElementsByClassName("sbi");
+    for (var i=0; i<sbis.length; i++){
+      var burndown = 0;
+      var total = 0;
+      var effort = sbis[i].getElementsByClassName("effort");
+      var pgs = sbis[i].getElementsByClassName("pgs");
+      for (var n=0; n<effort.length; n++){
+        total = Number(total + Number(effort[n].innerHTML));
+        if(pgs[n].innerHTML == 'C'){
+          burndown = Number(burndown+ Number(effort[n].innerHTML));
+        }
+      }
+      var vari = total - burndown;
+      if (total == 0){
+        var perc = 100;
+      }else{
+        var perc = (vari*100/total).toFixed();
+      }
+      sbis[i].getElementsByClassName("burndown")[0].innerHTML = vari+' ('+perc+'%)';
+    }
+  }
+</script>
 
 {% endblock content %}
