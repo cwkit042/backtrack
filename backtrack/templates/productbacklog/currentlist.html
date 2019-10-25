@@ -1,0 +1,40 @@
+<!-- extends: declare the file is inherited from base.html -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- write the 'title' defined in base.html -->
+{% block title %}
+    PBI Current View
+{% endblock title %}
+
+<!-- write the 'content' defined in base.html  -->
+{% block content %}
+<!-- define the container of article's title -->
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Progress</th>
+        <th scope="col">Created Date</th>
+        <th scope="col">Story Point</th>
+        <th scope="col">Description</th>
+      </tr>
+    </thead
+    <tbody>
+      {% for pbi in pbis %}
+      <tr>
+        <th scope="row">
+          <a href="{% url 'sprintbacklog:addsbi' pbi.id %}">
+            {{pbi.name}}
+          </a>
+        </th>
+        <td>{{pbi.progress}}</td>
+        <td>{{pbi.created}}</td>
+        <td>{{pbi.storypoint}}</td>
+        <td>{{pbi.description}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

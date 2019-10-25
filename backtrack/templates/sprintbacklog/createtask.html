@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %} New Task {% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <br>
+            <!-- submit form -->
+            <h1>Task in {{target_sbi.productbacklogitem.name}}</h1>
+            <form method="post" action=".">
+
+                {% csrf_token %}
+                <!-- title -->
+                <div class="form-group">
+                    <!-- tag -->
+                    <label for="name">Name</label>
+                    <!-- title box -->
+                    <input type="text" class="form-control" id="name" name="name">
+                </div>
+                <!-- title -->
+                <div class="form-group">
+                    <!-- tag -->
+                    <label for="description">Description</label>
+                    <!-- title box -->
+                    <input type="text" class="form-control" id="description" name="description">
+                </div>
+                <!-- title -->
+                <div class="form-group">
+                    <!-- tag -->
+                    <label for="effort">Effort</label>
+                    <!-- title box -->
+                    <input type="text" class="form-control" id="effort" name="effort">
+                </div>
+                <!-- submit btn -->
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

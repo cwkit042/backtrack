@@ -1,0 +1,42 @@
+<!-- extends: declare the file is inherited from base.html -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- write the 'title' defined in base.html -->
+{% block title %}
+  Sprint List
+{% endblock title %}
+
+<!-- write the 'content' defined in base.html  -->
+{% block content %}
+<!-- define the container of article's title -->
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Sprint</th>
+        <th scope="col">Product</th>
+        <th scope="col">Team</th>
+        <th scope="col">Created</th>
+        <th scope="col">Progress</th>
+        <th scope="col">Deadline</th>
+      </tr>
+    </thead
+    <tbody>
+      {% for sprint in sprints %}
+      <tr>
+        <th scope="row">
+          <a href="{% url 'sprintbacklog:sbilist' sprint.id %}">
+            {{sprint.number}}
+          </a>
+        </th>
+        <td>{{sprint.product}}</td>
+        <td>{{sprint.team}}</td>
+        <td>{{sprint.created}}</td>
+        <td>{{sprint.progress}}</td>
+        <td>{{sprint.deadline}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}
