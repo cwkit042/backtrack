@@ -20,10 +20,33 @@ class ProductBacklogItem (models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
 #    team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    progress = models.CharField(max_length=20, default="not_started")
+
+    NOTSTART = 'N'
+    INPROGRESS = 'P'
+    COMPLETE = 'C'
+    PROGRESS_STATUS = (
+        (NOTSTART, 'not start'),
+        (INPROGRESS, 'in progress'),
+        (COMPLETE, 'complete'),
+    )
+
+    progress = models.CharField(
+        max_length=1,
+        choices=PROGRESS_STATUS,
+        default=NOTSTART,
+        blank=False,
+    )
+
     storypoint = models.IntegerField()
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
-
+    order = models.IntegerField(default=0)
     def __str__(self):
         return self.name
+
+class ProductBacklogItemOrder (models.Model):
+    productbacklogitem = models.ForeignKey(ProductBacklogItem, on_delete=models.CASCADE, null=True)
+    headpbi = models.ForeignKey(ProductBacklogItem, related_name='headpbi' ,on_delete=models.SET_NULL, null=True)
+    tailpbi = models.ForeignKey(ProductBacklogItem, related_name='tailpbi', on_delete=models.SET_NULL, null=True)
+    def __str__(self):
+        return self.productbacklogitem.name

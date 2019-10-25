@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %} New Article {% endblock title %}
+{% block title %} New Project {% endblock title %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -8,7 +8,7 @@
             <br>
             <!-- submit form -->
             <form method="post" action=".">
-   
+
                 {% csrf_token %}
                 <!-- title -->
                 <div class="form-group">

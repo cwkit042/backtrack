@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product,ProductBacklogItem
+from .models import Product,ProductBacklogItem, ProductBacklogItemOrder
 
 class AddProductForm(forms.ModelForm):
     class Meta:

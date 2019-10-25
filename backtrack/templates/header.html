@@ -19,12 +19,29 @@
         <li class="nav-item">
           <a class="nav-link" href="/productbacklog/addproduct">Add Product</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/productbacklog">PBI List</a>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            ProductBacklog
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href='/productbacklog'>PBI Full View</a>
+            <a class="dropdown-item" href="/productbacklog/orderlist">PBI Current View</a>
+            <a class="dropdown-item" href='/productbacklog/addpbi'>Add PBI</a>
+          </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/productbacklog/addpbi">Add PBI</a>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            SprintBacklog
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href='/sprintbacklog'>Sprint</a>
+            <a class="dropdown-item" href='/sprintbacklog/addsprintview'>Add Sprint</a>
+
+          </div>
         </li>
+
 
 	{% if user.is_authenticated %}
           <!-- if login, shows username -->

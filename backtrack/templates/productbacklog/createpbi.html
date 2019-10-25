@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %} New Article {% endblock title %}
+{% block title %} New PBI {% endblock title %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -31,6 +31,17 @@
                     <!-- title box -->
                     <input type="text" class="form-control" id="storypoint" name="storypoint">
                 </div>
+
+                <div class="form-group">
+                    <!-- tag -->
+                    <label for="follow">Follow</label>
+                    <!-- select box -->
+                    <select class="form-control" name="follow" id="follow">
+                      <option value="">--TOP--</option>
+                      {% for pbi in pbi_list %}
+                      <option value="{{pbi.pk}}">{{ pbi.name }}</option>
+                      {% endfor %}
+                    </select>
 
                 <!-- submit btn -->
                 <button type="submit" class="btn btn-primary">Create</button>
