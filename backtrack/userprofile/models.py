@@ -22,7 +22,7 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        return 'user {}'.format(self.user.name)
+        return 'user {}'.format(self.user.username)
 
 class Team(models.Model):
     name = models.CharField(max_length=20, blank=True)
@@ -36,4 +36,4 @@ class TeamMember(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user
+        return self.user.username

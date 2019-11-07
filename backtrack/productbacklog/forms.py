@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product,ProductBacklogItem, ProductBacklogItemOrder
+from .models import Product,ProductBacklogItem
 
 class AddProductForm(forms.ModelForm):
     class Meta:
@@ -10,3 +10,8 @@ class AddPBIForm(forms.ModelForm):
     class Meta:
         model = ProductBacklogItem
         fields = ( 'name', 'description', 'storypoint')
+
+class ProductBacklogForm(forms.ModelForm):
+    class Meta:
+        model = ProductBacklogItem
+        fields = ( 'name', 'storypoint', 'description')

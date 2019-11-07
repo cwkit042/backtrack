@@ -1,37 +1,67 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db.models import F
-from .forms import AddProductForm, AddPBIForm
+from .forms import AddProductForm, AddPBIForm, ProductBacklogForm
+from userprofile.models import Profile
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from .models import Product, ProductBacklogItem, ProductBacklogItemOrder
+from .models import Product, ProductBacklogItem
 
 # Create your views here.
 
+@login_required(login_url='/login')
 def add_product(request):
-    if request.method == "POST":
-        add_product_form = AddProductForm(data=request.POST)
-        if add_product_form.is_valid():
-            new_product = add_product_form.save(commit=False)
-            new_product.owner = User.objects.get(id = 1)
-            new_product.save()
-            return redirect('/')
+    if request.user.profile.type == 'PO':
+        if request.method == "POST":
+            add_product_form = AddProductForm(data=request.POST)
+            if add_product_form.is_valid():
+                new_product = add_product_form.save(commit=False)
+                new_product.owner = User.objects.get(id = request.user.id)
+                new_product.save()
+                return redirect('/')
+            else:
+                return HttpResponse("The Form is not valid, please post again")
         else:
-            return HttpResponse("The Form is not valid, please post again")
+            add_product_form = AddProductForm()
+            context = { 'add_product_form': add_product_form }
+            return render(request, 'productbacklog/create.html', context)
     else:
-        add_product_form = AddProductForm()
-        context = { 'add_product_form': add_product_form }
-        return render(request, 'productbacklog/create.html', context)
+        return HttpResponse("You are not Product Owner!")
 
+@login_required(login_url='/login')
 def pbi_current_list(request):
     pbis = ProductBacklogItem.objects.filter(progress = 'N')
     context = {'pbis': pbis}
     return render(request, 'productbacklog/currentlist.html', context)
+    
+@login_required(login_url='/login')
+def homepage(request):
+    if Profile.objects.filter(user_id=request.user.id).exists():
+        profile = Profile.objects.get(user_id=request.user)
+    else:
+        profile = Profile.objects.create(user=request.user)
+    if profile.type == 'PO':
+        return redirect('/productbacklog/orderlist/')
+    elif profile.type == 'DV':
+        return redirect('/sprintbacklog/')
+    else:
+        return HttpResponse("Your User is not either Developer or Product Owner")
 
+@login_required(login_url='/login')
 def pbi_list(request):
     pbis = ProductBacklogItem.objects.all()
+    print(request.user)
+    if Profile.objects.filter(user_id=request.user.id).exists():
+        profile = Profile.objects.get(user_id=request.user)
+    else:
+        profile = Profile.objects.create(user=request.user)
+    #PO DV
+    print(profile.type)
     context = {'pbis': pbis}
     return render(request, 'productbacklog/list.html', context)
 
+@login_required(login_url='/login')
 def order_list(request):
     # pbis = ProductBacklogItemOrder.objects.filter(productbacklogitem__product__name = 'helloword')
     # order_list = []
@@ -47,6 +77,7 @@ def order_list(request):
     context = {'pbis': order_list}
     return render(request, 'productbacklog/orderlist.html', context)
 
+@login_required(login_url='/login')
 def add_pbi(request):
     if request.method == "POST":
         add_pbi_form = AddPBIForm(data=request.POST)
@@ -127,6 +158,8 @@ def add_pbi(request):
         pbi_list = ProductBacklogItem.objects.filter(order__gt=0).filter(product = Product.objects.get(name = "helloword").id).order_by('order')
         context = {'add_pbi_form': add_pbi_form, 'pbi_list':pbi_list}
         return render(request, 'productbacklog/createpbi.html', context)
+        
+@login_required(login_url='/login')
 def switch_pbi(request):
     if request.method == "POST":
         #print(request.POST.getlist("switch", None))
@@ -173,3 +206,49 @@ def switch_pbi(request):
 
 
     return redirect('/productbacklog/orderlist')
+    
+@login_required(login_url='/login')
+def delete_pbi(request):
+    if request.method == "POST":
+        pbiId = request.POST.get('id');
+        productA = Product.objects.get(productbacklogitem = pbiId)
+        owner = productA.owner
+        pbi = ProductBacklogItem.objects.get(id = pbiId)
+        print(owner)
+        if owner == request.user:
+            pbiOrder = pbi.order;
+            print(pbiOrder);
+            pbis = ProductBacklogItem.objects.filter(product = productA)
+            for pbiA in pbis:
+                if pbiA.order > pbiOrder:
+                    pbiA.order -= 1
+                    pbiA.save()
+            pbi.delete()
+            return redirect('/productbacklog/orderlist')
+        else:
+            return HttpResponse("You are not the product owner of this Product")
+    else:
+        return HttpResponse("ONLY POST ALLOWED")
+
+def modify_pbi(request):
+    if request.method == "POST":
+        pbiId = request.POST.get('id');
+        productA = Product.objects.get(productbacklogitem = pbiId)
+        owner = productA.owner
+        pbi = ProductBacklogItem.objects.get(id = pbiId)
+        print(owner)
+        if owner == request.user:
+            product_form = ProductBacklogForm(data=request.POST)
+            if product_form.is_valid():
+                pbi_cd = product_form.cleaned_data
+                pbi.description = pbi_cd['description']
+                pbi.name = pbi_cd['name']
+                pbi.storypoint = pbi_cd['storypoint']
+                pbi.save()
+                return redirect('/productbacklog/orderlist')
+            else:
+                return HttpResponse("invalid form")
+        else:
+            return HttpResponse("You are not the product owner of this Product")
+    else:
+        return HttpResponse("ONLY POST ALLOWED")

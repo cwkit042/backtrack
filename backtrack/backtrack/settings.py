@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'sprintbacklog',
     'userprofile',
     'productbacklog',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

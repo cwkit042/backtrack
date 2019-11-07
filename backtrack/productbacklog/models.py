@@ -44,9 +44,9 @@ class ProductBacklogItem (models.Model):
     def __str__(self):
         return self.name
 
-class ProductBacklogItemOrder (models.Model):
-    productbacklogitem = models.ForeignKey(ProductBacklogItem, on_delete=models.CASCADE, null=True)
-    headpbi = models.ForeignKey(ProductBacklogItem, related_name='headpbi' ,on_delete=models.SET_NULL, null=True)
-    tailpbi = models.ForeignKey(ProductBacklogItem, related_name='tailpbi', on_delete=models.SET_NULL, null=True)
-    def __str__(self):
-        return self.productbacklogitem.name
+#class ProductBacklogItemOrder (models.Model):
+#    productbacklogitem = models.ForeignKey(ProductBacklogItem, on_delete=models.CASCADE, null=True)
+#    headpbi = models.ForeignKey(ProductBacklogItem, related_name='headpbi' ,on_delete=models.SET_NULL, null=True)
+#    tailpbi = models.ForeignKey(ProductBacklogItem, related_name='tailpbi', on_delete=models.SET_NULL, null=True)
+#    def __str__(self):
+#        return self.productbacklogitem.name

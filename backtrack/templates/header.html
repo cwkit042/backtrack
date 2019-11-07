@@ -16,6 +16,8 @@
     <div>
       <ul class="navbar-nav">
         <!-- item -->
+        {% if user.is_authenticated %}
+        {% if user.profile.type == 'PO' %}
         <li class="nav-item">
           <a class="nav-link" href="/productbacklog/addproduct">Add Product</a>
         </li>
@@ -25,12 +27,20 @@
             ProductBacklog
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href='/productbacklog'>PBI Full View</a>
+            <a class="dropdown-item" href='/productbacklog/fulllist'>PBI Full View</a>
             <a class="dropdown-item" href="/productbacklog/orderlist">PBI Current View</a>
-            <a class="dropdown-item" href='/productbacklog/addpbi'>Add PBI</a>
           </div>
         </li>
-
+        {% endif %}
+        {% if user.profile.type == 'DV' %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            ProductBacklog
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/productbacklog/orderlist">PBI Current View</a>
+          </div>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             SprintBacklog
@@ -41,6 +51,8 @@
 
           </div>
         </li>
+        {% endif %}
+        {% endif %}
 
 
 	{% if user.is_authenticated %}
@@ -50,9 +62,8 @@
                 {{ user.username }}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#" onclick="user_delete()">Delete AC</a>
                 <a class="dropdown-item" href='#'>Profile</a>
-                <a class="dropdown-item" href="#">Logout</a>
+                <a class="dropdown-item" href="/login/logout/">Logout</a>
 
               </div>
           </li>
@@ -69,27 +80,3 @@
   </div>
 </nav>
 
-{% if user.is_authenticated %}
-<form
-    style="display:none;"
-    id="user_delete"
-    action="#}"
-    method="POST"
->
-{% csrf_token %}
-    <button type="submit">submit</button>
-</form>
-    <script>
-        function user_delete() {
-            layer.open({
-                title: "Delete AC",
-                content: "Confirm to Delete AC",
-		btn: ['Delete'],
-                yes: function(index, layero) {
-                    $('form#user_delete button').click();
-                    layer.close(index);
-                },
-            })
-        }
-    </script>
-{% endif %}

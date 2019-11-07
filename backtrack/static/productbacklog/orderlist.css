@@ -1,0 +1,38 @@
+.btnInForm {
+  margin: 20px;
+}
+
+.tSPContainer {
+  display: block;
+  float: right;
+  margin: 20px;
+}
+.tSPContainer label{
+  display: inline;
+  float: left;
+  font-weight: lighter;
+  font-size: 15px;
+  padding-right: 20px;
+}
+#totalStoryPoint{
+  display: inline;
+  float: right;
+  font-weight: bold;
+  font-size: 15px;
+  padding-right: 10px;
+}
+
+.namePopup {
+    color: red;
+}
+
+.namePopup:hover{
+    cursor: pointer;
+}
+
+.form-control {
+    margin-left:10px;
+}
+#delete {
+    float:right;
+}

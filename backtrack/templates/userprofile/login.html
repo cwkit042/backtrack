@@ -5,8 +5,6 @@
     <div class="row">
         <div class="col-12">
 			<br>
-				<h5>Register a new account</h5>
-				<h5>Click <a href='{% url "userprofile:register" %}'>Register</a></h5>
 			<br>
             <form method="post" action=".">
                 {% csrf_token %}
@@ -23,9 +21,7 @@
                 <!-- submit -->
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
-            <br>
-			<h5>Forgot Password</h5>
-			<h5>Click<a href='{% url "password_reset_recover" %}'>Here</a>Reset password</h5>
+            
 </div>
         </div>
     </div>

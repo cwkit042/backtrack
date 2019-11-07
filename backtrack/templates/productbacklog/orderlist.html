@@ -8,44 +8,97 @@
 {% endblock title %}
 
 
-  </script>
 <!-- write the 'content' defined in base.html  -->
 {% block content %}
+<link rel="stylesheet" href="{% static 'productbacklog/orderlist.css' %}"/>
+<script src="{% static 'productbacklog/orderlist.js' %}"></script>
 <!-- define the container of article's title -->
+{% if user.profile.type == 'PO' %}
 <form method="post" action="/productbacklog/switchpbi">
   {% csrf_token %}
-  <button type="submit" class="btn btn-primary mb-2">switch</button><br>
+  <button id='switchBtn' type="submit" class="btn btn-primary mb-2 btnInForm">switch</button>
+  <a href="/productbacklog/addpbi" class="btn btn-primary mb-2 btnInForm">Add PBI</a>
+  {% endif %}
+  <div class='tSPContainer'><label for='totalStoryPoint'>Total Story Point:</label><div id='totalStoryPoint'></div></div>
 <table class="table">
     <thead>
       <tr>
         <th scope="col">Order</th>
         <th scope="col">Name</th>
+        {% if user.profile.type == 'PO' %}
         <th scope="col">Check</th>
+        {% endif %}
         <th scope="col">Progress</th>
         <th scope="col">Created Date</th>
         <th scope="col">Story Point</th>
+        <th scope="col">Cumlative Point</th>
         <th scope="col">Description</th>
       </tr>
     </thead>
     <tbody>
       {% for pbi in pbis %}
-      <tr>
+      <tr id={{pbi.id}}>
         <th scope="row">{{pbi.order}}</th>
+        {%  if user.profile.type == 'DV' %}
         <th scope="row" action="/productbacklog/switchpbi">
           <a href="{% url 'sprintbacklog:addsbi' pbi.id %}">
             {{pbi.name}}
           </a>
         </th>
+        {% endif %}
+        {%  if user.profile.type == 'PO' %}
+        <th scope="row"">
+            <div value={{pbi.id}} class="namePopup" data-toggle="modal" data-target="#myModal" onclick="namePopupFunc(event)">{{pbi.name}}</div>
+        </th>
         <div class="form-check">
           <td><input class="form-check-input" type="checkbox" value="{{pbi.id}}" name="switch" id="switch"></td>
         </div>
+        {% endif %}
         <td>{{pbi.progress}}</td>
         <td>{{pbi.created}}</td>
-        <td>{{pbi.storypoint}}</td>
-        <td>{{pbi.description}}</td>
+        <td class='storyPoint'>{{pbi.storypoint}}</td>
+        <td class='cumulativeStoryPoint'></td>
+        <td class='description'>{{pbi.description}}</td>
       </tr>
       {% endfor %}
     </tbody>
 </table>
+{% if user.profile.type == 'PO' %}
 </form>
+
+<!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 id='titleInModal' class="modal-title"></h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form id='modifyPBI' method='POST'>
+                                    {% csrf_token %}
+                                    <div class="form-group form-inline">
+                                        <label class='labelInModal' for='nameInModal'>Name:</label>
+                                        <input type="text" class="form-control" id="nameInModal" name="name" value=''>
+                                    </div>
+                                    <div class="form-group form-inline">
+                                        <label class='labelInModal' for='storyPointInModal'>Story Point:</label>
+                                        <input type="text" class="form-control" id="storyPointInModal" name="storypoint" value=''>
+                                    </div>
+                                    <div class="form-group form-inline col-md-8">
+                                        <label class='labelInModal' for='descriptionInModal'>Description:</label>
+                                        <textarea type="text" class="form-control" id="descriptionInModal" name="description" rows="12" value=''></textarea>
+                                    </div>
+                                    <input type='text' id='idInModal' name='id' value='' hidden>
+                                    <button class="btn btn-primary" id='modifyBtn' onclick='pbi_modify()' >Modify</button>
+                                    <button class="btn btn-primary" id='deleteBtn' onclick='pbi_delete()'>Delete</button>
+                                    <button id="submit" type="submit" hidden>submit</button>
+                                </form>
+                            </div>
+                        </div>
+      
+                    </div>
+                </div>
+{% endif %}
 {% endblock content %}

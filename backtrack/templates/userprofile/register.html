@@ -1,17 +1,13 @@
 {% extends "base.html" %} {% load staticfiles %}
 {% block title %} Register {% endblock title %}
 {% block content %}
-<style>
-    form {
-        user-select: none;
-    }
-</style>
 <div class="container">
     <div class="row">
         <div class="col-12">
             <br>
             <form method="post" action=".">
                 {% csrf_token %}
+                
                 <!-- username -->
                 <div class="form-group col-md-4">
                     <label for="username">Username</label>
@@ -32,24 +28,22 @@
                     <label for="password2">Cofirm Password</label>
                     <input type="password" class="form-control" id="password2" name="password2" required>
                 </div>
-                <div class="form-group col-md-6">
-                    <div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="status" id="inlineRadio1" value="developer" checked>
+                <div class="form-group col-md-4">
+                    <div class="form-check-inline">
+						<input class="form-check-input" type="radio" name="type" id="inlineRadio1" value="DV" checked>
 						<label class="form-check-label" for="inlineRadio1">
 							Developer
 						</label>
 					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="status" id="inlineRadio2" value="product_owner">
-						<label class="form-check-label" for="inlineRadio2">
+					<div class="form-check-inline">
+						<input class="form-check-input" type="radio" name="type" id="inlineRadio1" value="PO">
+						<label class="form-check-label" for="inlineRadio1">
 							Product Owner
 						</label>
 					</div>
                 </div>
                 <!-- submit -->
-                <div class="form-group col-md-2">
-                    <button type="submit" class="btn btn-primary">submit</button>
-                </div>
+                <button type="submit" class="btn btn-primary">submit</button>
             </form>
         </div>
     </div>
